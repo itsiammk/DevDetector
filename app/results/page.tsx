@@ -19,18 +19,21 @@ const user = {
   phone: "+1 (234) 567-8901",
 };
 
-export default function ResultsPage({
-  searchParams,
-}: {
-  searchParams: { username: string };
-}) {
+interface PageProps {
+  searchParams: {
+    username: string;
+  };
+}
+
+export default function ResultsPage({ searchParams }: PageProps) {
   const username = searchParams.username;
+
   if (!username) {
     return <p>No username provided.</p>;
   }
+
   return (
     <div>
-      {/* <h1>Results for @{username}</h1> */}
       <Suspense fallback={<Loading />}>
         <ResultsContent username={username} />
       </Suspense>
@@ -60,7 +63,7 @@ async function ResultsContent({ username }: { username: string }) {
       url: platform.url || "#", // Fallback if no URL is provided
     }))
     .sort((a, b) => Number(b.exists) - Number(a.exists));
-    
+
   const totalPlatformsUserAvailable = platforms.filter(
     (item) => item.exists
   ).length;

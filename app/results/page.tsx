@@ -22,7 +22,7 @@ const user = {
 export default function ResultsPage({
     searchParams,
   }: {
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: any;
   }) {
     const username = Array.isArray(searchParams.username)
       ? searchParams.username[0]

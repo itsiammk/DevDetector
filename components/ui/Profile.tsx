@@ -1,17 +1,17 @@
 import Image from "next/image";
 
 interface ProfileProps {
-  name: string;
+  name: string | null; // Allow null
   country: string | null;
   email: string | null;
   phone: string | null;
   address: string | null;
-  profilePhoto: string;
-  profilePhotos: any;
-  githubUsername: string;
+  profilePhoto: string | null;
+  profilePhotos: any | null;
+  githubUsername: string | null;
   stackoverflowReputation: number | null;
   codeforcesRating: number | null;
-  hackerrankLevel: number;
+  hackerrankLevel: number | null;
   leetcodeSolvedProblems: {
     easy: number;
     medium: number;
@@ -124,7 +124,7 @@ export default function Profile({
             {hackerrankLevel || "-"}
           </span>
         </p>
-    
+
         <p>
           <span className="text-gray-600 dark:text-gray-400">
             CodeChef Rating:

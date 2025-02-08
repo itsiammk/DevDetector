@@ -19,28 +19,28 @@ const user = {
   phone: "+1 (234) 567-8901",
 };
 
-interface PageProps {
-    searchParams: Record<string, string | string[] | undefined>; 
-  }
-  
-
-export default function ResultsPage({ searchParams }: PageProps) {
+export default function ResultsPage({
+    searchParams,
+  }: {
+    searchParams: { username?: string | string[] };
+  }) {
+    // Handle the possibility that searchParams.username is a string or an array
     const username = Array.isArray(searchParams.username)
-    ? searchParams.username[0]
-    : searchParams.username;
-
-  if (!username) {
-    return <p>No username provided.</p>;
+      ? searchParams.username[0]
+      : searchParams.username;
+  
+    if (!username) {
+      return <p>No username provided.</p>;
+    }
+  
+    return (
+      <div>
+        <Suspense fallback={<Loading />}>
+          <ResultsContent username={username} />
+        </Suspense>
+      </div>
+    );
   }
-
-  return (
-    <div>
-      <Suspense fallback={<Loading />}>
-        <ResultsContent username={username} />
-      </Suspense>
-    </div>
-  );
-}
 
 async function ResultsContent({ username }: { username: string }) {
   // Fetch data from the API

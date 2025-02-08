@@ -31,8 +31,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
-          attribute="class" // Use "class" for Tailwind, "data-theme" for CSS variables
-          defaultTheme="system" // Default to system preference
+          attribute="class" 
+          defaultTheme="system" 
           enableSystem // Sync with OS theme
           disableTransitionOnChange // Optional: Disable CSS transitions during theme switch
         >

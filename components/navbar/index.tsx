@@ -63,7 +63,6 @@ const Icons = {
 const DATA = {
   navbar: [
     { href: "#", icon: HomeIcon, label: "Home" },
-    { href: "#", icon: PencilIcon, label: "Blog" },
   ],
   contact: {
     social: {
@@ -85,13 +84,6 @@ const DATA = {
         name: "X",
         url: "#",
         icon: Icons.x,
-        navbar: true,
-
-      },
-      email: {
-        name: "Send Email",
-        url: "#",
-        icon: Icons.email,
         navbar: true,
 
       },

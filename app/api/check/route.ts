@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // Define dynamic rendering behavior
-export const dynamic = 'force-dynamic' as const;
+export const dynamic = "force-dynamic";
 
 // Type definitions for platform configurations
 interface PlatformConfig {
@@ -149,85 +149,89 @@ const platformConfigs: Record<string, PlatformConfig> = {
 };
 
 // Function to check platform availability
-async function checkPlatform(username: string, platform: string): Promise<{
+async function checkPlatform(
+  username: string,
+  platform: string
+): Promise<{
   exists: boolean;
   url?: string;
-  responseBody?: any; // Include the raw API response body
+  responseBody?: any;
 }> {
   const config = platformConfigs[platform];
   if (!config) return { exists: false };
 
   try {
-    let url = config.url.replace('{username}', username); // Replace placeholder with username
+    let url = config.url.replace('{username}', username);
     const options: RequestInit = {
-      method: config.method || 'GET', // Default to GET if method is not specified
-      headers: config.headers || {}, // Use custom headers if provided
+      method: config.method || 'GET',
+      headers: config.headers || {},
     };
 
-    // Add body if defined in the config
     if (config.body) {
       options.body = config.body(username);
     }
 
-    const response = await fetch(url, options); // Make the API request
+    const response = await fetch(url, options);
 
-    console.log(response, 'resp---'); // Log the response for debugging
-    if (!response.ok) return { exists: false }; // Return false if the response is not OK
+    if (!response.ok) return { exists: false };
 
-    // Handle platforms that require the raw Response object
     if (config.useRawResponse) {
-      const exists = await config.check(response); // Pass the raw response to the check function
+      const exists = await config.check(response);
       return {
         exists,
-        url: response.url.split('?')[0], // Clean URL
-        responseBody: null, // No response body for raw Response platforms
+        url: response.url.split('?')[0],
+        responseBody: null,
       };
     }
 
-    // Parse the response body once
     let responseBody;
     try {
-      responseBody = await response.json(); // Try parsing as JSON
+      responseBody = await response.json();
     } catch {
-      responseBody = await response.text(); // Fallback to text if JSON parsing fails
+      responseBody = await response.text();
     }
 
-    console.log(responseBody, 'respb');
-
-    // Validate the response using the check function
-    const exists = typeof config.check === 'function'
-      ? await config.check(responseBody)
-      : false;
+    const exists =
+      typeof config.check === 'function'
+        ? await config.check(responseBody)
+        : false;
 
     return {
       exists,
-      url: platform === 'leetcode' ? `https://leetcode.com/${username}` : response.url.split('?')[0], // Clean URL
-      responseBody, // Include the raw API response body
+      url:
+        platform === 'leetcode'
+          ? `https://leetcode.com/${username}`
+          : response.url.split('?')[0],
+      responseBody,
     };
   } catch (error) {
-    console.error(`Error checking platform ${platform}:`, error); // Log errors
+    console.error(`Error checking platform ${platform}:`, error);
     return { exists: false };
   }
 }
 
 // Main API handler
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  const url = new URL(request.url); // Extract the full URL
-  const searchParams = Object.fromEntries(url.searchParams.entries()); // Convert searchParams to an object
-  const username = searchParams.username; // Get the username parameter
+  const url = new URL(request.url);
+  const searchParams = Object.fromEntries(url.searchParams.entries());
+  const username = searchParams.username;
 
   if (!username) {
-    return NextResponse.json({ error: 'Username required' }, { status: 400 }); // Return an error if no username is provided
+    return NextResponse.json({ error: 'Username required' }, { status: 400 });
   }
 
-  const results: Record<string, { exists: boolean; url?: string; responseBody?: any }> = {}; // Initialize results object
-  const platforms = Object.keys(platformConfigs); // Get all platform keys
+  const results: Record<
+    string,
+    { exists: boolean; url?: string; responseBody?: any }
+  > = {};
+
+  const platforms = Object.keys(platformConfigs);
 
   await Promise.allSettled(
     platforms.map(async (platform) => {
-      results[platform] = await checkPlatform(username, platform); // Check each platform and store the result
+      results[platform] = await checkPlatform(username, platform);
     })
   );
 
-  return NextResponse.json({ username, results }); // Return the final JSON response
+  return NextResponse.json({ username, results });
 }

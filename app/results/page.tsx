@@ -20,13 +20,14 @@ const user = {
 };
 
 interface PageProps {
-  searchParams: {
-    username: string;
-  };
-}
+    searchParams: Record<string, string | string[] | undefined>; 
+  }
+  
 
 export default function ResultsPage({ searchParams }: PageProps) {
-  const username = searchParams.username;
+    const username = Array.isArray(searchParams.username)
+    ? searchParams.username[0]
+    : searchParams.username;
 
   if (!username) {
     return <p>No username provided.</p>;

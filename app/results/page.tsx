@@ -4,20 +4,37 @@ import Profile from "@/components/ui/Profile";
 import { Suspense } from "react";
 import { Space_Mono } from "next/font/google";
 import Loading from "@/components/ui/loading";
-import { Label, Pie, PieChart } from "recharts";
 import { PieChartComponent } from "@/components/chart/chartPie";
 import { HeroHighlight, Highlight } from "@/components/ui/hero-highlight";
 import extractUserProfile from "@/lib/extractUserProfile";
 
 const spaceMono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"] });
 
-const user = {
-  name: "Alex Quantum",
-  username: "quantumalex",
-  address: "123 Cyber Street, Neo Tokyo",
-  email: "alex@quantum.future",
-  phone: "+1 (234) 567-8901",
-};
+const websiteRedirectUrl: Record<string, string> = {
+    github: "https://github.com/",
+    gitlab: "https://gitlab.com/",
+    bitbucket: "https://bitbucket.org/",
+    leetcode: "https://leetcode.com/",
+    codeforces: "https://codeforces.com/profile/",
+    hackerrank: "https://www.hackerrank.com/",
+    codewars: "https://www.codewars.com/users/",
+    codechef: "https://www.codechef.com/users/",
+    topcoder: "https://www.topcoder.com/members/",
+    exercism: "https://exercism.org/profiles/",
+    stackoverflow: "https://stackoverflow.com/users/",
+    devto: "https://dev.to/",
+    hashnode: "https://hashnode.com/@",
+    medium: "https://medium.com/@",
+    kaggle: "https://www.kaggle.com/",
+    geeksforgeeks: "https://auth.geeksforgeeks.org/user/",
+    npm: "https://www.npmjs.com/~",
+    pypi: "https://pypi.org/user/",
+    docker: "https://hub.docker.com/u/",
+    replit: "https://replit.com/@",
+    codepen: "https://codepen.io/",
+    jsfiddle: "https://jsfiddle.net/user/",
+  }
+  
 
 export default function ResultsPage({
     searchParams,
@@ -52,15 +69,15 @@ async function ResultsContent({ username }: { username: string }) {
   }
   const extractedUserData = extractUserProfile(data);
 
-  console.log(data, "data");
   console.log(extractedUserData, "data33");
-
+  
   // Extract platforms from the API response
+  console.log(data, "data");
   const platforms = Object.entries(data.results)
     .map(([name, platform]: [string, any]) => ({
       name,
       exists: platform.exists,
-      url: platform.url || "#", // Fallback if no URL is provided
+      url: websiteRedirectUrl[name] || "#", // Fallback if no URL is provided
     }))
     .sort((a, b) => Number(b.exists) - Number(a.exists));
 
@@ -96,7 +113,7 @@ async function ResultsContent({ username }: { username: string }) {
                 <PlatformCard
                   key={platform.name}
                   {...platform}
-                  username={user.username}
+                  username={username}
                 />
               ))}
             </div>

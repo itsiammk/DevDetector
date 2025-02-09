@@ -4,13 +4,15 @@ import { ExternalLink } from "lucide-react";
 
 interface PlatformCardProps {
   name: string;
-  username: string;
   exists: boolean; // Indicates if the platform profile exists
   url: string; // URL to navigate to the platform's profile page
+  username: string; 
 }
 
-export default function PlatformCard({ name, username, exists, url }: PlatformCardProps) {
+export default function PlatformCard({ name, exists, url, username }: PlatformCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const profileUrl = `${url}${username}`
+  console.log(url, username, `${url}${username}`,'url');
 
   return (
     <div
@@ -53,7 +55,7 @@ export default function PlatformCard({ name, username, exists, url }: PlatformCa
 
         {/* Action Button */}
         <a
-          href={exists ? url : "#"} // Link to the platform's profile page if available
+          href={exists ? profileUrl : "#"} // Link to the platform's profile page if available
           target="_blank"
           rel="noopener noreferrer"
           className={`w-full py-2 px-4 rounded transition-colors duration-300 ease-in-out flex items-center justify-center text-sm ${

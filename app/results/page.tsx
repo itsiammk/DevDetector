@@ -69,10 +69,10 @@ async function ResultsContent({ username }: { username: string }) {
   }
   const extractedUserData = extractUserProfile(data);
 
-  console.log(extractedUserData, "data33");
+//   console.log(extractedUserData, "data33");
   
   // Extract platforms from the API response
-  console.log(data, "data");
+//   console.log(data, "data");
   const platforms = Object.entries(data.results)
     .map(([name, platform]: [string, any]) => ({
       name,

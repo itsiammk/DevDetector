@@ -12,7 +12,7 @@ interface PlatformCardProps {
 export default function PlatformCard({ name, exists, url, username }: PlatformCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const profileUrl = `${url}${username}`
-  console.log(url, username, `${url}${username}`,'url');
+  // console.log(url, username, `${url}${username}`,'url');
 
   return (
     <div

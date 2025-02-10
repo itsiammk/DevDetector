@@ -100,7 +100,8 @@ const platformConfigs: Record<string, PlatformConfig> = {
   kaggle: {
     url: 'https://www.kaggle.com/{username}',
     method: 'GET',
-    check: (data: any) => data?.status === 200, // Check if the status code is 200
+    useRawResponse: true, // Indicate that this platform requires the raw Response object
+    check: async (res: Response) => res.ok, // Check if the status code is 200
   },
   geeksforgeeks: {
     url: 'https://geeks-for-geeks-api.vercel.app/{username}',
@@ -116,7 +117,8 @@ const platformConfigs: Record<string, PlatformConfig> = {
   pypi: {
     url: 'https://pypi.org/user/{username}/',
     method: 'GET',
-    check: (data: any) => !!data?.user?.username, // Check if the username exists in the response
+    useRawResponse: true, // Indicate that this platform requires the raw Response object
+    check: async (res: Response) => res.ok, // Check if the status code is 200
   },
   docker: {
     url: 'https://hub.docker.com/v2/users/{username}',
@@ -149,63 +151,63 @@ const platformConfigs: Record<string, PlatformConfig> = {
 };
 
 // Function to check platform availability
-async function checkPlatform(
-  username: string,
-  platform: string
-): Promise<{
+async function checkPlatform(username: string, platform: string): Promise<{
   exists: boolean;
   url?: string;
-  responseBody?: any;
+  responseBody?: any; // Include the raw API response body
 }> {
   const config = platformConfigs[platform];
   if (!config) return { exists: false };
 
   try {
-    let url = config.url.replace('{username}', username);
+    let url = config.url.replace('{username}', username); // Replace placeholder with username
     const options: RequestInit = {
-      method: config.method || 'GET',
-      headers: config.headers || {},
+      method: config.method || 'GET', // Default to GET if method is not specified
+      headers: config.headers || {}, // Use custom headers if provided
     };
 
+    // Add body if defined in the config
     if (config.body) {
       options.body = config.body(username);
     }
 
-    const response = await fetch(url, options);
+    const response = await fetch(url, options); // Make the API request
 
-    if (!response.ok) return { exists: false };
+    if (!response.ok) return { exists: false }; // Return false if the response is not OK
 
+    // Handle platforms that require the raw Response object
+    
     if (config.useRawResponse) {
-      const exists = await config.check(response);
+      const exists = await config.check(response); // Pass the raw response to the check function
       return {
         exists,
-        url: response.url.split('?')[0],
-        responseBody: null,
+        url: response.url.split('?')[0], // Clean URL
+        responseBody: null, // No response body for raw Response platforms
       };
     }
-
+    
+    // Parse the response body once
     let responseBody;
     try {
-      responseBody = await response.json();
+      responseBody = await response.json(); // Try parsing as JSON
     } catch {
-      responseBody = await response.text();
+      responseBody = await response.text(); // Fallback to text if JSON parsing fails
     }
+    
 
-    const exists =
-      typeof config.check === 'function'
-        ? await config.check(responseBody)
-        : false;
+    // Validate the response using the check function
+    const exists = typeof config.check === 'function'
+      ? await config.check(responseBody)
+      : false;
+    
 
     return {
       exists,
-      url:
-        platform === 'leetcode'
-          ? `https://leetcode.com/${username}`
-          : response.url.split('?')[0],
-      responseBody,
+      url: platform === 'leetcode' ? `https://leetcode.com/${username}` : response.url.split('?')[0], // Clean URL
+      responseBody, // Include the raw API response body
     };
   } catch (error) {
-    console.error(`Error checking platform ${platform}:`, error);
+    console.error(`Error checking platform ${platform}:`, error); // Log errors
     return { exists: false };
   }
 }

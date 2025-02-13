@@ -60,7 +60,21 @@ export default function Home() {
 
   return (
     <BackgroundLines className="flex items-center justify-center w-full flex-col px-4">
+      <a
+          href="https://www.producthunt.com/posts/devdetector?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-devdetector"
+          target="_blank"
+          className="mb-2 sm:mb-4"
+        >
+          <img
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=865914&theme=light&t=1739194607049"
+            alt="DevDetector - Spot&#0032;Programmers&#0032;Across&#0032;Platforms | Product Hunt"
+            width="200"
+            height="54"
+            className="w-[150px] sm:w-[180px] h-[50px]"
+          />
+        </a>
       <div className="z-10 flex items-center justify-center mb-4 sm:mb-0">
+        
         <AnimatedGradientText>
           🎉 <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
           <span
@@ -75,7 +89,7 @@ export default function Home() {
       </div>
       <h2 className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-4xl lg:text-7xl font-sans py-2 md:py-5 relative z-20 font-bold tracking-tight">
         Spot <br className="block md:hidden" /> <FlipWords words={words} />{" "}
-        <br className="block md:hidden" />{" "}Across 
+        <br className="block md:hidden" /> Across
         <br className="hidden md:block" /> Platforms
       </h2>
       <p className="max-w-xl mx-auto text-sm md:text-3xl text-neutral-700 dark:text-neutral-400 text-center mb-5">

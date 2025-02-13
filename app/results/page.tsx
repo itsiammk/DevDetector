@@ -66,8 +66,10 @@ async function ResultsContent({ username }: { username: string }) {
     return <p>No results found for @{username}.</p>;
   }
   const extractedUserData = extractUserProfile(data);
+  const leetcodeTotalProblemSolved = extractedUserData?.leetcodeSolvedProblems?.easy + extractedUserData?.leetcodeSolvedProblems?.medium + extractedUserData?.leetcodeSolvedProblems?.hard
+  const leetcodeCheck = extractedUserData?.leetcodeSolvedProblems && (leetcodeTotalProblemSolved > 0)
 
-  // console.log(extractedUserData, "data33");
+  // console.log(extractedUserData,leetcodeTotalProblemSolved, leetcodeCheck ,"data33");
 
   // Extract platforms from the API response
   // console.log(data, "data");
@@ -104,7 +106,7 @@ async function ResultsContent({ username }: { username: string }) {
             <div className="mt-3">
               <PieChartComponent totalCount={totalPlatformsUserAvailable} />
             </div>
-            {extractedUserData?.leetcodeSolvedProblems && (
+            {leetcodeCheck && (
               <div className="mt-3">
                 <LeetCodePieChart
                   easy={extractedUserData.leetcodeSolvedProblems.easy}

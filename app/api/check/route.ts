@@ -114,12 +114,12 @@ const platformConfigs: Record<string, PlatformConfig> = {
     method: 'GET',
     check: (data: any) => Array.isArray(data?.objects) && data.objects.length > 0, // Check if the objects array has results
   },
-  pypi: {
-    url: 'https://pypi.org/user/{username}/',
-    method: 'GET',
-    useRawResponse: true, // Indicate that this platform requires the raw Response object
-    check: async (res: Response) => res.ok, // Check if the status code is 200
-  },
+  // pypi: {
+  //   url: 'https://pypi.org/user/{username}/',
+  //   method: 'GET',
+  //   useRawResponse: true, // Indicate that this platform requires the raw Response object
+  //   check: async (res: Response) => res.ok, // Check if the status code is 200
+  // },
   docker: {
     url: 'https://hub.docker.com/v2/users/{username}',
     method: 'GET',

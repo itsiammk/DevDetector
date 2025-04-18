@@ -26,7 +26,7 @@ const platforms = [
   { id: "kaggle", name: "Kaggle" },
   { id: "geeksforgeeks", name: "GeeksForGeeks" },
   { id: "npm", name: "NPM" },
-  { id: "pypi", name: "PyPI" },
+  // { id: "pypi", name: "PyPI" },
   { id: "docker", name: "Docker Hub" },
   { id: "replit", name: "Replit" },
   { id: "codepen", name: "CodePen" },
@@ -63,7 +63,7 @@ export default function Home() {
       <a
           href="https://www.producthunt.com/posts/devdetector?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-devdetector"
           target="_blank"
-          className="mb-2 sm:mb-4"
+          className="mb-2 sm:mb-4 z-20"
         >
           <img
             src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=865914&theme=light&t=1739194607049"
